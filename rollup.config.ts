@@ -2,7 +2,7 @@ import { defineConfig } from 'rollup';
 import { swc, preserveUseDirective } from 'rollup-plugin-swc3';
 import { dts } from 'rollup-plugin-dts';
 
-import fsp from 'fs/promises';
+import fsp from 'node:fs/promises';
 
 import pkgJson from './package.json';
 import browserslist from 'browserslist';
@@ -14,9 +14,9 @@ const externalModules = Object.keys(pkgJson.dependencies)
     'react-router-dom',
     'next'
   ]);
-const external = (id: string) => {
+function external(id: string) {
   return externalModules.some((name) => id === name || id.startsWith(`${name}/`));
-};
+}
 
 // Same target as Next.js 13
 const targets = browserslist([
@@ -34,19 +34,22 @@ export default async function () {
 
   return defineConfig([{
     input,
-    output: [{
-      dir: 'dist',
-      format: 'commonjs',
-      entryFileNames: '[name]/index.cjs'
-    }, {
-      dir: 'dist',
-      format: 'commonjs',
-      entryFileNames: '[name]/index.js'
-    }, {
-      dir: 'dist',
-      format: 'esm',
-      entryFileNames: '[name]/index.mjs'
-    }],
+    output: [
+      {
+        dir: 'dist',
+        format: 'commonjs',
+        entryFileNames: '[name]/index.cjs',
+        chunkFileNames: 'chunks/[name].[hash].cjs',
+        compact: true
+      },
+      {
+        dir: 'dist',
+        format: 'esm',
+        entryFileNames: '[name]/index.mjs',
+        chunkFileNames: 'chunks/[name].[hash].mjs',
+        compact: true
+      }
+    ],
     plugins: [
       swc({
         isModule: true,

@@ -11,22 +11,22 @@ interface UseReactRouterIsMatchOption {
   end?: boolean
 }
 
+const identity = <V>(value: V) => value;
+
 /** @see https://foxact.skk.moe/use-react-router-is-match */
-export const useReactRouterIsMatch = (to: To, {
+export function useReactRouterIsMatch(to: To, {
   relative,
   caseSensitive = false,
   end = false
-}: UseReactRouterIsMatchOption = {}) => {
+}: UseReactRouterIsMatchOption = {}) {
   const { pathname: $locationPathname } = useLocation();
 
-  const { navigator: { encodeLocation } } = useContext(UNSAFE_NavigationContext);
+  const { navigator: { encodeLocation = identity } } = useContext<React.ContextType<typeof UNSAFE_NavigationContext>>(UNSAFE_NavigationContext);
   const path = useResolvedPath(to, { relative });
 
   return useMemo(() => {
     let locationPathname = $locationPathname;
-    let toPathname = encodeLocation
-      ? encodeLocation(path).pathname
-      : path.pathname;
+    let toPathname = encodeLocation(path).pathname;
 
     if (!caseSensitive) {
       locationPathname = locationPathname.toLowerCase();
@@ -40,4 +40,4 @@ export const useReactRouterIsMatch = (to: To, {
         && locationPathname.charAt(toPathname.length) === '/'
       );
   }, [encodeLocation, path, $locationPathname, caseSensitive, end]);
-};
+}

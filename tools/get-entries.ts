@@ -1,11 +1,14 @@
-import listDir from '@sukka/listdir';
-import path from 'path';
+import { fdir as Fdir } from 'fdir';
+import path from 'node:path';
 
 const rootDir = process.cwd();
 const srcDir = path.join(rootDir, 'src');
 
-export const getEntries = async () => {
-  const files = (await listDir(srcDir));
+export async function getEntries() {
+  const files = await new Fdir()
+    .withRelativePaths()
+    .crawl(srcDir)
+    .withPromise();
 
   return files.reduce<Record<string, string>>((prev, cur) => {
     const entryName = path.basename(cur, path.extname(cur));
@@ -16,4 +19,4 @@ export const getEntries = async () => {
     }
     return prev;
   }, {});
-};
+}
