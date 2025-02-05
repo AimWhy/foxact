@@ -38,28 +38,47 @@
     "type": "separator",
     "title": "Hooks"
   },
+  "use-abortable-effect": {},
   "use-clipboard": {},
+  "use-component-will-receive-update": {},
   "use-composition-input": {},
   "use-debounced-state": {},
   "use-debounced-value": {},
   "use-error-boundary": {},
+  "use-fast-click": {},
   "use-intersection": {},
   "use-is-client": {},
+  "use-is-online": {},
   "use-isomorphic-layout-effect": {},
+  "use-local-storage": {},
+  "use-media-query": {},
+  "use-page-visibility": {},
   "use-retimer": {},
+  "use-session-storage": {},
   "use-singleton": {},
   "use-stable-handler-only-when-you-know-what-you-are-doing-or-you-will-be-fired": {
     "title": "useStableHandler"
   },
+  "use-typescript-happy-callback": {},
   "use-uncontrolled": {},
+  "-- separator components": {
+    "type": "separator",
+    "title": "Components"
+  },
+  "compose-context-provider": {},
+  "current-year": {},
   "-- separator utilities": {
     "type": "separator",
     "title": "Utilities"
   },
-  "compose-context-provider": {},
   "context-state": {},
+  "create-local-storage-state": {},
+  "create-session-storage-state": {},
   "create-fixed-array": {},
+  "fetch-jsonp": {},
+  "invariant-nullthrow": {},
   "noop": {},
+  "no-ssr": {},
   "rem": {},
   "request-idle-callback": {},
   "typescript-happy-forward-ref": {},
@@ -67,6 +86,7 @@
     "type": "separator",
     "title": "Extensions"
   },
+  "use-next-link": {},
   "use-next-pathname": {},
   "use-react-router-enable-concurrent-navigation": {},
   "use-react-router-is-match": {}

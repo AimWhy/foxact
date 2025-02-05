@@ -1,7 +1,7 @@
 import 'client-only';
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
+import { useEffect } from '../use-abortable-effect';
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- explicitly banning ALL functions
 type NotFunction<T> = T extends Function ? never : T;
 
 /** @see https://foxact.skk.moe/use-debounced-value */
@@ -13,14 +13,15 @@ export function useDebouncedValue<T>(value: NotFunction<T>, wait: number, leadin
   const [outputValue, setOutputValue] = useState(value);
   const leadingRef = useRef(true);
 
-  useEffect(() => {
-    let isCancelled = false;
+  useEffect(signal => {
     let timeout: number | null = null;
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- false positive of useEffect
-    if (!isCancelled) {
-      if (leadingRef.current && leading) {
+    if (!signal.aborted) {
+      if (leading && leadingRef.current) {
         leadingRef.current = false;
+        // This only happens when leading is enabled
+        // This won't trigger infinitly re-render as long as value is stable
+        // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect -- see above
         setOutputValue(value);
       } else {
         timeout = window.setTimeout(() => {
@@ -31,7 +32,6 @@ export function useDebouncedValue<T>(value: NotFunction<T>, wait: number, leadin
     }
 
     return () => {
-      isCancelled = true;
       if (timeout) {
         window.clearTimeout(timeout);
       }

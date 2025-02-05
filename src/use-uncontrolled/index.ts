@@ -1,5 +1,6 @@
 import 'client-only';
-import { useCallback, useReducer, useRef } from 'react';
+import { useReducer, useRef } from 'react';
+import { useCallback } from '../use-typescript-happy-callback';
 
 const identity = <V>(value: V) => value;
 
@@ -16,9 +17,7 @@ export function useUncontrolled<T, E extends HTMLInputElement | HTMLSelectElemen
   // **UPDATE**
   // React removes the eager reducer bailout since React 18, so memoize the reducer is no longer necessary.
   // https://github.com/facebook/react/pull/22445
-  const reducer = (_prevState: T, valueAsAction: T) => {
-    return transformValue(valueAsAction);
-  };
+  const reducer = (_prevState: T, valueAsAction: T) => transformValue(valueAsAction);
 
   const [uncontrolledValue, setUncontrolledValue] = useReducer(reducer, initialValue);
 

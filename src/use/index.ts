@@ -1,7 +1,6 @@
-/// <reference types="react/experimental" />
-
 // https://github.com/pmndrs/jotai/blob/2188d7557500e59c10415a9e74bb5cfc8a3f9c31/src/react/useAtomValue.ts#L13-L42
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports -- check if React.use is available
 import reactExports from 'react';
 
 export const use
@@ -16,6 +15,7 @@ export const use
   ): T => {
     switch (promise.status) {
       case 'pending': {
+        // eslint-disable-next-line @typescript-eslint/only-throw-error -- React.use
         throw promise;
       }
       case 'fulfilled': {
@@ -26,6 +26,7 @@ export const use
       }
       default: {
         promise.status = 'pending';
+        // eslint-disable-next-line promise/catch-or-return -- React.use
         promise.then(
           (v) => {
             promise.status = 'fulfilled';
@@ -36,6 +37,7 @@ export const use
             promise.reason = e;
           }
         );
+        // eslint-disable-next-line @typescript-eslint/only-throw-error -- React.use
         throw promise;
       }
     }
